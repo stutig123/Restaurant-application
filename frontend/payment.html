@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Payment</h1>
+    <a href="cart.html" class="cart-link">Back to Cart</a>
+  </header>
+
+  <div class="checkout-form">
+    <h2>Payment Details</h2>
+    <div class="form-group">
+      <label>Card Number</label>
+      <input type="text" placeholder="1234 5678 9012 3456">
+    </div>
+    <div class="form-group">
+      <label>Expiry Date</label>
+      <input type="text" placeholder="MM/YY">
+    </div>
+    <div class="form-group">
+      <label>CVV</label>
+      <input type="text" placeholder="123">
+    </div>
+    <div class="form-group">
+      <label>Name on Card</label>
+      <input type="text" placeholder="Your Name">
+    </div>
+    <button id="payBtn" class="submit-btn">Pay Now</button>
+  </div>
+
+  <script>
+    document.getElementById('payBtn').addEventListener('click', () => {
+      alert('Payment successful! Your order is confirmed.');
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>

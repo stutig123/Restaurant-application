@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Your Order</h1>
+    <a href="menu.html" class="cart-link">Back to Menu</a>
+  </header>
+
+  <div id="cartItems" class="cart-list"></div>
+  <div id="totalPrice" class="total-price">Total: ₹0</div>
+  <button id="checkoutBtn" class="checkout-btn">Proceed to Checkout</button>
+
+  <script>
+    // Menu data (same as menu.html)
+    const menu = [
+      {
+        id: 1,
+        name: "Margherita Pizza",
+        price: 299
+      },
+      {
+        id: 2, 
+        name: "Pasta Carbonara",
+        price: 249
+      },
+      {
+        id: 3,
+        name: "Caesar Salad",
+        price: 199
+      },
+      {
+        id: 4,
+        name: "Chocolate Lava Cake",
+        price: 179
+      }
+    ];
+
+    // Load cart items
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartItems = document.getElementById('cartItems');
+    const totalPrice = document.getElementById('totalPrice');
+    let total = 0;
+
+    // Display cart items
+    cart.forEach(itemId => {
+      const item = menu.find(i => i.id === itemId);
+      if (item) {
+        total += item.price;
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <h3>${item.name}</h3>
+          <p>₹${item.price}</p>
+          <button onclick="removeFromCart(${item.id})">Remove</button>
+        `;
+        cartItems.appendChild(div);
+      }
+    });
+
+    // Update total
+    totalPrice.textContent = `Total: ₹${total}`;
+
+    // Remove item from cart
+    function removeFromCart(itemId) {
+      const index = cart.indexOf(itemId);
+      if (index > -1) {
+        cart.splice(index, 1);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        location.reload(); // Refresh to show updated cart
+      }
+    }
+
+    // Checkout button
+    document.getElementById('checkoutBtn').addEventListener('click', () => {
+      if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+      }
+      window.location.href = 'payment.html';
+    });
+  </script>
+</body>
+</html>

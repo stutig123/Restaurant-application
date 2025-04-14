@@ -1,0 +1,36 @@
+{
+    "users": [],
+    "menu": [
+        {
+            "id": 1,
+            "name": "Margherita Pizza",
+            "price": 299,
+            "description": "Classic pizza with tomato sauce and mozzarella",
+            "image": "https://example.com/pizza.jpg"
+        },
+        {
+            "id": 2,
+            "name": "Pasta Carbonara",
+            "price": 249,
+            "description": "Creamy pasta with bacon and parmesan",
+            "image": "https://example.com/pasta.jpg"
+        },
+        {
+            "id": 3,
+            "name": "Caesar Salad",
+            "price": 199,
+            "description": "Fresh salad with chicken and croutons",
+            "image": "https://example.com/salad.jpg"
+        },
+        {
+            "id": 4,
+            "name": "Chocolate Brownie",
+            "price": 149,
+            "description": "Warm chocolate brownie with ice cream",
+            "image": "https://example.com/brownie.jpg"
+        }
+    ],
+    "orders": [],
+    "bookings": []
+}
+  

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+</head>
+<body>
+  <h2>Admin Panel - Add Menu Item</h2>
+  <form id="menuForm">
+    <input type="text" id="name" placeholder="Item Name" required><br>
+    <input type="number" id="price" placeholder="Price" required><br>
+    <button type="submit">Add Item</button>
+  </form>
+
+  <script>
+    document.getElementById('menuForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const item = {
+        name: document.getElementById('name').value,
+        price: parseFloat(document.getElementById('price').value)
+      };
+      const res = await fetch('http://localhost:5000/api/menu', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(item)
+      });
+      const data = await res.json();
+      alert(data.message);
+    });
+  </script>
+</body>
+</html>

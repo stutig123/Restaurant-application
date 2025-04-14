@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delicious Bites Menu</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Delicious Bites Menu</h1>
+    <a href="cart.html" class="cart-link">View Cart (<span id="cart-count">0</span>)</a>
+  </header>
+  
+  <div id="menuList" class="menu-list"></div>
+
+  <script>
+    // Menu data
+    const menu = [
+      {
+        id: 1,
+        name: "Margherita Pizza",
+        description: "Classic pizza with tomato sauce and mozzarella",
+        price: 299,
+        icon: "🍕"
+      },
+      {
+        id: 2, 
+        name: "Pasta Carbonara",
+        description: "Spaghetti with creamy egg sauce and bacon",
+        price: 249,
+        icon: "🍝"
+      },
+      {
+        id: 3,
+        name: "Caesar Salad",
+        description: "Fresh romaine lettuce with Caesar dressing",
+        price: 199,
+        icon: "🥗"
+      },
+      {
+        id: 4,
+        name: "Chocolate Lava Cake",
+        description: "Warm chocolate cake with molten center",
+        price: 179,
+        icon: "🍰"
+      }
+    ];
+
+    // Load menu items
+    const list = document.getElementById('menuList');
+    
+    menu.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'menu-item';
+      div.innerHTML = `
+        <div class="item-icon">${item.icon}</div>
+        <div class="item-details">
+          <h3>${item.name}</h3>
+          <p class="description">${item.description}</p>
+          <p class="price">₹${item.price}</p>
+          <button class="add-to-cart" onclick="addToCart(${item.id})">Add to Cart</button>
+        </div>
+      `;
+      list.appendChild(div);
+    });
+
+    // Cart functions
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      document.getElementById('cart-count').textContent = cart.length;
+    }
+
+    function addToCart(itemId) {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cart.push(itemId);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartCount();
+      alert('Item added to cart!');
+    }
+
+    // Initialize
+    updateCartCount();
+  </script>
+</body>
+</html>
