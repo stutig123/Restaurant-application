@@ -1,27 +1,33 @@
-name: CI/CD Pipeline
+name: Deploy to EC2
 
 on:
   push:
     branches:
-      - main  # Trigger on pushes to the main branch
+      - main
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest  # Run on the latest Ubuntu image
-    
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout Repository
+      uses: actions/checkout@v3
 
-      - name: Set up Ansible
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ansible
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
 
-      - name: Install dependencies with Ansible
-        run: |
-          ansible-playbook -i ansible/inventory.ini ansible/install_dependencies.yml
+    - name: Install Ansible
+      run: |
+        python -m pip install --upgrade pip
+        pip install ansible
 
-      - name: Deploy application with Ansible
-        run: |
-          ansible-playbook -i ansible/inventory.ini ansible/deploy.yml
+    - name: Create SSH key file
+      run: |
+        echo "${{ secrets.ANSIBLE_PRIVATE_KEY }}" > ~/stuti-key.pem
+        chmod 600 ~/stuti-key.pem
+
+    - name: Run Ansible Playbook
+      run: |
+        ansible-playbook -i ansible/inventory.ini ansible/install_dependencies.yml

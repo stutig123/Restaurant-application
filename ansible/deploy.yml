@@ -2,11 +2,22 @@
 - name: Deploy Application
   hosts: web
   become: yes
+
   tasks:
+    - name: Ensure destination directory exists
+      file:
+        path: /var/www/app/
+        state: directory
+        mode: '0755'
+
     - name: Copy application files to the server
       copy:
-        src: /path/to/your/application/
+        src: ../frontend/
         dest: /var/www/app/
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
     - name: Restart Nginx
       service:
         name: nginx
