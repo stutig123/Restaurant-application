@@ -23,6 +23,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install ansible
 
+    - name: Add SSH Key to Known Hosts
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -H 65.1.130.199 >> ~/.ssh/known_hosts
+
     - name: Create SSH key file
       run: |
         echo "${{ secrets.ANSIBLE_PRIVATE_KEY }}" > ~/stuti-key.pem
