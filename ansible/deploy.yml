@@ -1,24 +1,37 @@
 ---
-- name: Deploy Application
+- name: Deploy Restaurant App on EC2
   hosts: web
-  become: yes
+  become: true
 
   tasks:
-    - name: Ensure destination directory exists
-      file:
-        path: /var/www/app/
-        state: directory
-        mode: '0755'
+    # Install Docker if not already installed
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+        update_cache: yes
 
-    - name: Copy application files to the server
-      copy:
-        src: ../frontend/
-        dest: /var/www/app/
-        owner: www-data
-        group: www-data
-        mode: '0644'
+    # Start Docker service
+    - name: Start Docker service
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
 
-    - name: Restart Nginx
-      service:
-        name: nginx
-        state: restarted
+    # Pull the latest Docker image of the restaurant app
+    - name: Pull Restaurant App Docker image
+      command: docker pull stutigambhir/restaurant-app:latest
+
+    # Stop the existing container if it's running
+    - name: Stop existing container
+      shell: |
+        docker ps -q --filter "name=restaurant-app" | grep -q . && docker stop restaurant-app || true
+
+    # Remove the old container if it exists
+    - name: Remove existing container
+      shell: |
+        docker ps -a -q --filter "name=restaurant-app" | grep -q . && docker rm restaurant-app || true
+
+    # Run the container
+    - name: Run Restaurant App container
+      command: docker run -d -p 80:3000 --name restaurant-app stutigambhir/restaurant-app:latest
