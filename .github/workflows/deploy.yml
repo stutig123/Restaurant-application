@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: Install Dependencies on EC2
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  deploy:
+  install_dependencies:
     runs-on: ubuntu-latest
 
     steps:
@@ -33,6 +33,6 @@ jobs:
         echo "${{ secrets.ANSIBLE_PRIVATE_KEY }}" > ~/stuti-key.pem
         chmod 600 ~/stuti-key.pem
 
-    - name: Run Ansible Playbook
+    - name: Run Ansible Playbook to Install Dependencies
       run: |
         ansible-playbook -i ansible/inventory.ini ansible/install_dependencies.yml
