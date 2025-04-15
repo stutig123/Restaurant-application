@@ -20,10 +20,7 @@
 
     # Log in to Docker Hub
     - name: Log in to Docker Hub
-      shell: echo "{{ docker_password }}" | docker login -u "{{ docker_username }}" --password-stdin
-      environment:
-        docker_username: "{{ lookup('env', 'DOCKER_USERNAME') }}"
-        docker_password: "{{ lookup('env', 'DOCKER_PASSWORD') }}"
+      shell: echo "{{ lookup('env', 'DOCKER_PASSWORD') }}" | docker login -u "{{ lookup('env', 'DOCKER_USERNAME') }}" --password-stdin
 
     # Pull the latest Docker image of the restaurant app
     - name: Pull Restaurant App Docker image
