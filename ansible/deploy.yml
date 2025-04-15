@@ -4,6 +4,12 @@
   become: true
 
   tasks:
+    # Install python3-apt to ensure apt module works
+    - name: Install python3-apt
+      apt:
+        name: python3-apt
+        state: present
+
     # Update apt cache and install Nginx
     - name: Update apt cache and install Nginx
       apt:
