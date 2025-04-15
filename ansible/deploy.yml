@@ -3,7 +3,7 @@
   become: true
   tasks:
 
-    # Install Docker (if not already installed)
+    # Install Docker
     - name: Install Docker
       apt:
         name: docker.io
