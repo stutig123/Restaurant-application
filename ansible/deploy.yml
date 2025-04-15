@@ -1,10 +1,9 @@
----
 - name: Deploy Restaurant App on EC2
   hosts: all
   become: true
   tasks:
 
-    # Install Docker
+    # Install Docker (if not already installed)
     - name: Install Docker
       apt:
         name: docker.io
@@ -19,6 +18,11 @@
         state: started
         enabled: true
       become: true
+
+    # Debug Docker login environment variables
+    - name: Debug Docker login environment variables
+      debug:
+        msg: "DOCKER_USERNAME={{ lookup('env', 'DOCKER_USERNAME') }}, DOCKER_PASSWORD={{ lookup('env', 'DOCKER_PASSWORD') }}"
 
     # Log in to Docker Hub
     - name: Log in to Docker Hub
