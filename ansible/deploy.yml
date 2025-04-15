@@ -22,7 +22,7 @@
     # Clone the repository from GitHub to the EC2 instance
     - name: Clone the Restaurant application repository
       git:
-        repo: 'https://github.com/stutig123/restaurant-app.git'  # Replace with your GitHub repo URL
+        repo: 'https://github.com/yourusername/restaurant-app.git'  # Replace with your GitHub repo URL
         dest: /var/www/restaurant-app
         version: main  # Replace with your branch name
         force: yes
@@ -37,7 +37,7 @@
         mode: '0755'
         remote_src: yes
 
-    # Restart Nginx to serve the new content
+    # Restart Nginx to apply changes
     - name: Restart Nginx to apply changes
       service:
         name: nginx
