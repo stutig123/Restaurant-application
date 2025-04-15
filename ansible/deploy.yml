@@ -4,10 +4,10 @@
   become: true
 
   tasks:
-    # Install Docker if not already installed
+    # Install Docker using dnf (for Amazon Linux 2023)
     - name: Install Docker
-      apt:
-        name: docker.io
+      dnf:
+        name: docker
         state: present
         update_cache: yes
 
