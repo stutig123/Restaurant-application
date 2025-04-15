@@ -20,8 +20,12 @@
 
     # Log in to Docker Hub
     - name: Log in to Docker Hub
-      shell: echo "{{ lookup('env', 'DOCKER_PASSWORD') }}" | docker login -u "{{ lookup('env', 'DOCKER_USERNAME') }}" --password-stdin
-
+      shell: |
+        echo "{{ lookup('env', 'DOCKER_PASSWORD') }}" | docker login -u "{{ lookup('env', 'DOCKER_USERNAME') }}" --password-stdin
+      environment:
+        DOCKER_USERNAME: "{{ lookup('env', 'DOCKER_USERNAME') }}"
+        DOCKER_PASSWORD: "{{ lookup('env', 'DOCKER_PASSWORD') }}"
+      
     # Pull the latest Docker image of the restaurant app
     - name: Pull Restaurant App Docker image
       command: docker pull stutigambhir/restaurant-app:latest
