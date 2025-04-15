@@ -17,17 +17,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Install Ansible
       - name: Set up Ansible
         run: sudo apt update && sudo apt install -y ansible
 
-      # Create SSH key for EC2 access
       - name: Create SSH key
         run: |
           echo "${{ secrets.EC2_SSH_KEY }}" > stuti-key.pem
           chmod 600 stuti-key.pem
 
-      # Run Ansible Playbook
       - name: Run Ansible Playbook
         run: |
           ansible-playbook ansible/deploy.yml -i ansible/inventory.ini --private-key stuti-key.pem -u ${{ secrets.EC2_USER }}

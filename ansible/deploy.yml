@@ -1,50 +1,35 @@
 ---
 - name: Deploy Restaurant Website on EC2
-  hosts: all
-  become: true
-
+  hosts: web
+  become: yes
   tasks:
-    # Install python3-apt to ensure apt module works
-    - name: Install python3-apt
-      apt:
-        name: python3-apt
-        state: present
 
-    # Update apt cache and install Nginx
-    - name: Update apt cache and install Nginx
-      apt:
-        update_cache: yes
-        name:
-          - nginx
-        state: present
+    - name: Ensure website directory exists
+      file:
+        path: /home/ubuntu/restaurant-app
+        state: directory
 
-    # Start Nginx service
-    - name: Ensure Nginx is running
-      service:
-        name: nginx
-        state: started
-        enabled: yes
-
-    # Clone the repository from GitHub to the EC2 instance
-    - name: Clone the Restaurant application repository
-      git:
-        repo: 'https://github.com/yourusername/restaurant-app.git'  # Replace with your GitHub repo URL
-        dest: /var/www/restaurant-app
-        version: main  # Replace with your branch name
-        force: yes
-
-    # Copy the website files to Nginx's web root
-    - name: Copy website files to Nginx web root
+    - name: Copy website files
       copy:
-        src: /var/www/restaurant-app
-        dest: /var/www/html/
-        owner: www-data
-        group: www-data
-        mode: '0755'
-        remote_src: yes
+        src: "{{ item }}"
+        dest: /home/ubuntu/restaurant-app/
+        mode: '0644'
+      with_fileglob:
+        - "../../*.html"
+        - "../../*.css"
+        - "../../*.js"
 
-    # Restart Nginx to apply changes
-    - name: Restart Nginx to apply changes
-      service:
-        name: nginx
-        state: restarted
+    - name: Set folder permissions
+      file:
+        path: /home/ubuntu/restaurant-app
+        mode: '0755'
+        recurse: yes
+
+    - name: Create README on server
+      copy:
+        content: "This site is deployed using Ansible!"
+        dest: /home/ubuntu/restaurant-app/README.txt
+
+    - name: Show completion message
+      debug:
+        msg: "Restaurant Website successfully deployed using Ansible 🚀"
