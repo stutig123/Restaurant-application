@@ -1,29 +1,46 @@
-name: Deploy Restaurant App
+name: Deploy with Ansible
 
 on:
   push:
     branches:
-      - main  # You can replace this with your branch name if it's different
+      - main
+
+permissions:
+  contents: read
+  security-events: write
 
 jobs:
   deploy:
+    name: 🚀 Deploy to EC2 with Ansible
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+      # Install Ansible
+      - name: Set up Ansible
+        run: sudo apt update && sudo apt install -y ansible
 
-      - name: Log in to Docker Hub
+      # Create SSH key for EC2 access
+      - name: Create SSH key
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > stuti-key.pem
+          chmod 600 stuti-key.pem
+
+      # Docker login (if using a private registry)
+      - name: Docker Login (if needed)
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Run Ansible Playbook for Deployment
-        uses: gabrieldorn/ansible-playbook-action@v1.0.2
-        with:
-          playbook: ansible/deploy.yml
-          inventory: ansible/inventory.ini
-          private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+      # Run Ansible Playbook
+      - name: Run Ansible Playbook
+        run: |
+          ansible-playbook ansible/deploy.yml -i ansible/inventory.ini --private-key stuti-key.pem -u ${{ secrets.EC2_USER }}
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: "False"
+
+      # Clean up the SSH key after use
+      - name: Clean up SSH key
+        run: rm -f stuti-key.pem
